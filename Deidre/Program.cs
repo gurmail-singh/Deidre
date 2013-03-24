@@ -11,17 +11,7 @@ namespace Deidre
     {
         static void Main(string[] args)
         {
-            DateTime currentDate = DateTime.Now;
-            string dateStr = "Monday 18th March " + currentDate.Year;
-
-            dateStr =dateStr.Replace("th", "");
-            dateStr =dateStr.Replace("rd", "");
-
-            DateTime dateTimeStr = Convert.ToDateTime(dateStr);
-            dateTimeStr.ToString("YYYYMMDD");
-            Console.WriteLine(dateTimeStr);
-            Console.WriteLine(dateTimeStr.ToString("yyyyMMdd"));
-            string inputFile = @"\schedule2.txt";
+            string inputFile = @"C:\Users\Urban\Documents\schedule2.txt";
             StreamReader sr = new StreamReader(inputFile);
             string strLine = "";
             //string sPattern =@"(?i)(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY){1}\s\d{1,2}{1}(ND|TH|RD){1}\s(JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER){1}";
@@ -29,27 +19,42 @@ namespace Deidre
             string sPattern = @"(?i)(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY){1}\s(\d{1,2}){1}(ND|TH|RD){1}\s(JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER){1}";
             while ((strLine = sr.ReadLine()) != null)
             {
-                Match match = Regex.Match(strLine, sPattern);
-                if (match.Success)                
-                //Console.WriteLine(strLine);
-                //if (System.Text.RegularExpressions.Regex.IsMatch(strLine, sPattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                Match dateMatch = Regex.Match(strLine, sPattern);
+                if (dateMatch.Success)             
                 {
+                    //we got a date match, so convert the date into a useaable form - remove "th" or "rd" and then convert
+                    string dateStr;
+                    DateTime dateTimeStr;
+                    System.Console.WriteLine(dateMatch.Value);                    
+                    dateStr = dateMatch.Value.Replace("th", "");
+                    dateStr = dateMatch.Value.Replace("rd", "");
+                    System.Console.WriteLine(dateStr);
+                    break;
+                    dateTimeStr = Convert.ToDateTime(dateStr);
+                    dateStr = dateTimeStr.ToString("YYYYMMDD");
+            
+
                     System.Console.WriteLine("Found" + strLine);
-                    System.Console.WriteLine("match found {0}'", match.Value);
+                    System.Console.WriteLine("match found {0}'", dateMatch.Value);
                     //1Will  help you?			09067 577 162	S20
-                    string prnPattern = @"(?i)(\d{5})\(sd{3})\s(d{3})\s(wd{2})";
+                    string prnPattern = @"(?i)(\d{5})\s+(\d{3})\s+(\d{3})\s+(\w\d{2})";
+                    //string prnPattern = @"(?i)(\d{5})";
                     for(int i=0; i<5; i++) 
                     {
                         strLine = sr.ReadLine();
+                        //System.Console.WriteLine("nextline= " + strLine);                        
                         Match match = Regex.Match(strLine, prnPattern);
+                        //System.Console.WriteLine("Match= " + match.Value);
+                        
                         if (match.Success)
                         {
-                        string prnVlaue = 
+                           string PRN = match.Groups[1].Value + match.Groups[2].Value + match.Groups[3].Value;
+                           string promptToPlay = match.Groups[4].Value;
+                           System.Console.WriteLine(dateStr);
+                           System.Console.WriteLine("PRN = " + PRN);
+                           System.Console.WriteLine("Prompt = " + promptToPlay); 
                         }
-                    }
-                
-
-                    break;
+                    }                
                 }
                 else
                 {
