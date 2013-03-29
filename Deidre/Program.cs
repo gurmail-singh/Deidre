@@ -11,7 +11,8 @@ namespace Deidre
     {
         static void Main(string[] args)
         {
-            string inputFile = @"C:\Users\Urban\Documents\schedule2.txt";
+            //string inputFile = @"C:\Users\Urban\Documents\schedule2.txt";
+            string inputFile = @"C:\Users\Urban\Downloads\Deidre's Helplines - 14-20 March 2013.txt";
             StreamReader sr = new StreamReader(inputFile);
             string strLine = "";
             //string sPattern =@"(?i)(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY){1}\s\d{1,2}{1}(ND|TH|RD){1}\s(JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER){1}";
@@ -23,13 +24,13 @@ namespace Deidre
                 if (dateMatch.Success)             
                 {
                     //we got a date match, so convert the date into a useaable form - remove "th" or "rd" and then convert
-                    string dateStr;
-                    DateTime dateTimeStr;
-                    System.Console.WriteLine(dateMatch.Value);                    
-                    dateStr = dateMatch.Value.Replace("th", "");
-                    dateStr = dateMatch.Value.Replace("rd", "");
+                   
+                    string dateStr = dateMatch.Groups[1].Value + " " + dateMatch.Groups[2].Value + " " + dateMatch.Groups[4].Value;
+                    
+                  
                     System.Console.WriteLine(dateStr);
-                    break;
+                    DateTime dateTimeStr;
+
                     dateTimeStr = Convert.ToDateTime(dateStr);
                     dateStr = dateTimeStr.ToString("YYYYMMDD");
             
@@ -42,9 +43,9 @@ namespace Deidre
                     for(int i=0; i<5; i++) 
                     {
                         strLine = sr.ReadLine();
-                        //System.Console.WriteLine("nextline= " + strLine);                        
+                        System.Console.WriteLine("nextline= " + strLine);                        
                         Match match = Regex.Match(strLine, prnPattern);
-                        //System.Console.WriteLine("Match= " + match.Value);
+                        System.Console.WriteLine("Match= " + match.Value);
                         
                         if (match.Success)
                         {
@@ -64,6 +65,8 @@ namespace Deidre
             //(?i)(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY){1}\s\d{1,2}{1}(ND|TH|RD){1}\s(JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER){1}
             //Cleanup
             sr.Close();
+            System.Console.ReadLine();
+
         }  
     }
 }
